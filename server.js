@@ -3,11 +3,13 @@ const chokidar = require('chokidar')
 const path = require('path')
 const socketsConnected = []
 
-module.exports = (opts, cb) => {
+module.exports = (opts, cb, onChange) => {
   let baseURL
   let pjson
   let error
   let log = opts.quiet ? () => {} : console.log.bind(console)
+  onChange = onChange || () => {}
+
   try {
     pjson = require(path.join(opts.dir || path.dirname(require.main.filename), 'package.json'))
   } catch (err) {
@@ -57,6 +59,7 @@ module.exports = (opts, cb) => {
 
     }
     log('File ', onPath, ' emitted: ' + event)
+    onChange({path: onPath, absolutePath})
     socketsConnected.forEach((socket) => {
       socket.emit(event, {path: onPath, absolutePath})
     })
