@@ -7,8 +7,8 @@ module.exports = (opts, cb, onChange) => {
   let baseURL
   let pjson
   let error
-  let log = opts.quiet ? () => {} : console.log.bind(console)
-  onChange = onChange || () => {}
+  let log = opts.quiet ? (() => {}) : console.log.bind(console)
+  onChange = onChange || (() => {})
 
   try {
     pjson = require(path.join(opts.dir || path.dirname(require.main.filename), 'package.json'))
